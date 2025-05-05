@@ -15,11 +15,6 @@ async function bootstrap() {
     app.useGlobalPipes(new ValidationPipe());
     app.useGlobalFilters(new AllExceptionsFilter());
     
-    app.use((req: any, res: { setHeader: (arg0: string, arg1: string) => void; }, next: () => void) => {
-      res.setHeader('Content-Type', 'application/json');
-      next();
-    });
-
     app.setGlobalPrefix('api/v1');
     const config = new DocumentBuilder()
       .setTitle('CSV Processing API')

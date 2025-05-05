@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: csv_app_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: csv_app
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    profiles:
+      - dev
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: csv_app_rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - app-network
+    profiles:
+      - dev
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: csv_app
+    ports:
+      - "3001:3001"
+    depends_on:
+      - postgres
+      - rabbitmq
+    environment:
+      - DB_HOST=host.docker.internal
+      - RABBITMQ_URL=amqp://guest:guest@host.docker.internal:5672
+      - APP_PORT=3001
+      - JWT_SECRET=JhdksSTQwTnL1WP2uNddcBXc/DPxsjauUSI7wwEazHPJs7WacL3BYGnuDlynhdD+MSHNqBoIp6/vfpKzPZIkDg==
+    networks:
+      - app-network
+    profiles:
+      - dev
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

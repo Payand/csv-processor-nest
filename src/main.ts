@@ -4,9 +4,7 @@ import { ValidationPipe, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Transport } from '@nestjs/microservices';
 import { AppModule } from './app.module';
-import { AllExceptionsFilter } from './common/filters/http-exception.filter';
-import { join } from 'path';
-import { NestExpressApplication } from '@nestjs/platform-express';
+import { AllExceptionsFilter } from './common/filters/http-exception.filter';import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
@@ -21,8 +19,6 @@ async function bootstrap() {
       res.setHeader('Content-Type', 'application/json');
       next();
     });
-
-    app.useStaticAssets(join(__dirname, '..', 'uploads'));
 
     app.setGlobalPrefix('api/v1');
     const config = new DocumentBuilder()
@@ -49,10 +45,8 @@ async function bootstrap() {
       },
     });
 
-  
     await app.startAllMicroservices();
 
-   
     const port = configService.get('app.port');
     await app.listen(port);
     logger.log(`Application is running on: http://localhost:${port}`);

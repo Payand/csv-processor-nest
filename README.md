@@ -102,7 +102,7 @@ The application follows a modular architecture with the following components:
    docker-compose up -d postgres rabbitmq
    ```
 
-5. Run database migrations:
+5. Run database migrations(not needed):
    ```bash
    npm run migration:run
    ```
